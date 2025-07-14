@@ -155,3 +155,16 @@ class BookValidationTests {
     }
 }
 ```
+
+## 통합테스트
+- `@SpringBootTest` 어노테이션으로 애플리케이션 컨텍스트를 로드
+- `webEnvironment` 속성으로 내장 톰캣 등 웹 환경 설정
+- 필요한 경우 `@AutoConfigureMockMvc` 또는 `TestRestTemplate` 으로 HTTP API 호출
+- `@Testcontainers` 등으로 외부 의존성(DB, Kafka 등) 컨테이너화하여 실제 환경에 가까운 테스트 수행
+
+## 취약점 검사
+```sh
+brew tap anchore/grype
+brew install grype
+
+```
