@@ -24,7 +24,8 @@ public class BookService {
                 .orElseThrow(() -> new BookNotFoundException(isbn));
     }
 
-    public Book addBookToCatalog(String isbn, Book book) {
+    public Book addBookToCatalog(Book book) {
+        String isbn = book.isbn();
         if(bookRepository.existsByIsbn(isbn)) {
             throw new BookAlreadyExistsException(isbn);
         }
@@ -44,6 +45,6 @@ public class BookService {
                             book.author(),
                             book.price());
                     return bookRepository.save(bookToEdit);
-                }).orElseGet(() -> addBookToCatalog(isbn, book));
+                }).orElseGet(() -> addBookToCatalog(book));
     }
 }
