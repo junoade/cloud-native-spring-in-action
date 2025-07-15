@@ -33,4 +33,31 @@ class BookControllerTest {
                     assertThat(actualBook.isbn()).isEqualTo(expectedBook.isbn());
                 });
     }
+
+    @Test
+    void whenGetRequestWithIsbnThenReturnBook() {
+        String isbn = "1234567890";
+        Book bookToCreate = new Book(isbn, "Title", "Author", 9.90);
+
+        // Given : 미리 POST 요청으로 Book이 생성됨
+        Book expectedBook = webTestClient
+                .post()
+                .uri("/books")
+                .bodyValue(bookToCreate)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(Book.class).value(book -> assertThat(book).isNotNull())
+                .returnResult().getResponseBody();
+
+        webTestClient
+                .get()
+                .uri("/books/" + isbn)
+                .exchange()
+                .expectStatus().is2xxSuccessful()
+                .expectBody(Book.class).value(actualBook -> {
+                    assertThat(actualBook).isNotNull();
+                    assertThat(actualBook.isbn()).isEqualTo(expectedBook.isbn());
+                });
+
+    }
 }

@@ -156,6 +156,42 @@ class BookValidationTests {
 }
 ```
 
+### Mockito 관련
+@InjectMocks의 Mock 객체 스캔 및 주입 범위
+
+1. 같은 테스트 클래스 내의 @Mock, @Spy로 선언된 객체들만 대상
+   •	@InjectMocks는 현재 테스트 클래스 내부에서 @Mock(또는 @Spy)로 생성된 객체들 중, 타입이 맞는 필드에 자동 주입
+
+```java
+@ExtendWith(MockitoExtension.class)
+class BookServiceTest {
+
+    @Mock
+    private BookRepository bookRepository;
+
+    @InjectMocks
+    private BookService bookService;
+
+    // ...
+}
+```
+
+2. 주입 방식은 필드 주입, 생성자 주입, 세터 주입 모두 허용 
+- Mockito는 다음 우선순위로 주입을 시도합니다:
+```md
+1.	생성자 주입
+2.	세터 메서드 주입
+3.	필드 주입 (리플렉션)
+      여러 생성자가 있다면, mock과 타입이 맞는 생성자를 우선적으로 사용합니다.
+```
+
+3. 다른 클래스에 정의된 @Mock 객체는 인식하지 못함
+- @Mock 객체가 다른 테스트 클래스에 있거나, 외부에서 주입된 경우는 자동으로 인식되지 않습니다. 
+- 반드시 같은 테스트 클래스 안에서 선언된 Mock이어야 합니다.
+
+
+4. @InjectMocks는 DI 컨테이너(Spring 등)에서 관리되는 빈이 아니라, Mockito가 직접 생성한 테스트용 객체
+
 ## 통합테스트
 - `@SpringBootTest` 어노테이션으로 애플리케이션 컨텍스트를 로드
 - `webEnvironment` 속성으로 내장 톰캣 등 웹 환경 설정
@@ -168,3 +204,7 @@ brew tap anchore/grype
 brew install grype
 
 ```
+
+## Github Action
+
+
