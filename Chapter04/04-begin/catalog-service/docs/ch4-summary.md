@@ -17,4 +17,25 @@
 ### 스프링 속성에 접근 하는 방법 - @ConfigurationProperties
 
 
-
+- 프로젝트 빌드시 새로운 사용자 정의 속성에 대한 메타데이터를 json방식으로 변환
+- 앞서 @ConfigurationProperties
+```json
+{
+  "groups": [
+    {
+      "name": "polar",
+      "type": "com.polarbookshop.catalogservice.config.PolarProperties",
+      "sourceType": "com.polarbookshop.catalogservice.config.PolarProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "polar.greeting",
+      "type": "java.lang.String",
+      "description": "사용자 정의 속성인 polar.greeting 속성에 대한 문자열 필드",
+      "sourceType": "com.polarbookshop.catalogservice.config.PolarProperties"
+    }
+  ],
+  "hints": []
+}
+```
