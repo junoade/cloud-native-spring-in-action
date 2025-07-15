@@ -83,3 +83,22 @@ annotationProcessor 'org.springframework.boot:spring-boot-configuration-processo
 2025-07-15T23:54:58.265+09:00  INFO 11407 --- [           main] c.p.c.CatalogServiceApplication          : Started CatalogServiceApplication in 0.49 seconds (process running for 0.579)
 
 ```
+
+GET 요청보내서 list를 받아와보자
+```json
+[
+    {
+        "isbn": "1234567809",
+        "title": "Spring Boot",
+        "author": "Spring Boot",
+        "price": 1009.0
+    },
+    {
+        "isbn": "1234567808",
+        "title": "Spring Boot",
+        "author": "Spring Boot",
+        "price": 1008.0
+    },
+  ...
+]    
+```
