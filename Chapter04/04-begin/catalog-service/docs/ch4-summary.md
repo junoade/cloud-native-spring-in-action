@@ -102,3 +102,97 @@ GET 요청보내서 list를 받아와보자
   ...
 ]    
 ```
+
+
+### 속성 설정에 대한 우선순위
+- CLI 인수, JVM 시스템 속성, 외부화 설정을 통해 새로운 JAR 아티팩트를 만들 필요가 없음
+
+1. CLI 인수로 전달되는 속성값
+```bash
+ java -jar build/libs/catalog-service-0.0.1-SNAPSHOT.jar --polar.greeting="Welcome to the catalog from CLI"
+```
+
+- 응답
+```
+GET localhost:9001/
+Welcome to the catalog from CLI
+```
+
+2. JVM 시스템 속성을 통한 애플리케이션 구성
+```bash
+ java -Dpolar.greeting="Welcome to the catalog from JVM" -jar build/libs/catalog-service-0.0.1-SNAPSHOT.jar
+```
+- 결과
+```
+Welcome to the catalog from JVM
+```
+
+## 4.3 스프링 클라우드 컨피그 서버서 중앙식 설정 관리
+- 설정데이터에 대한 지속적 수정과 외부저장 공간 
+- 실행 중인 애플리케이션에 대한 런타임내 변경된 설정 적용 
+- 분산된 환경 등 멀티 인스턴스에 대한 동일한 설정 값 유지
+- 스프링부트의 속싱이나 환경 변수는 설정 암호화 X, 안전한 관리방법 필요
+
+
+### 실습) 깃을 통한 설정 데이터 저장 및 컨피그 서버 구성
+1. spring-cloud-config-server 의존성 추가
+```gradle
+implementation 'org.springframework.cloud:spring-cloud-config-server'
+```
+
+2. 설정 서버 활성화 `EnableConfigServer`
+
+3. 설정 서버 설정
+- 내장 톰켓 서버에 대한 연결시간초과 및 쓰레드 풀
+- git uri 설정
+```yml
+server:
+  port: 8888
+  tomcat:
+    connection-timeout: 2s
+    keep-alive-timeout: 15s
+    threads:
+      max: 50
+      min-spare: 5
+
+
+spring:
+  application:
+    name: config-service
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/junoade/config-repo-example
+          default-label: main
+          timeout: 5
+          clone-on-start: true
+          force-pull: true
+          search-paths: catalog-service # Spring Config 깃헙 레포 구조 참고
+```
+
+### 실습) 스프링 클라우드 컨피그 클라이언트 적용
+- 애플리케이션과 설정서버를 통합하기 위해 의존성 추가
+- 애플리케이션의 application.yml에 설정 추가
+- JAR 아티팩트로 패키징 후 프로파일 지정 하여 실행
+```bash
+java -jar build/libs/catalog-service-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+```
+
+- 결과
+```
+  Welcome to the production catalog from the config server
+```
+
+- 애플리케이션 실행 로그 분석
+```
+2025-07-19T20:58:11.829+09:00  INFO 41347 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2025-07-19T20:58:11.830+09:00  INFO 41347 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Located environment: name=catalog-service, profiles=[default], label=null, version=43ca90236c755b61b0d892c66c09674db0212cf6, state=
+2025-07-19T20:58:11.830+09:00  INFO 41347 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2025-07-19T20:58:11.830+09:00  INFO 41347 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Located environment: name=catalog-service, profiles=[prod], label=null, version=43ca90236c755b61b0d892c66c09674db0212cf6, state=
+```
+
+- 컨피그 서버 로그 분석
+```
+2025-07-19T20:58:11.729+09:00  INFO 40651 --- [config-service] [nio-8888-exec-2] o.s.c.c.s.e.NativeEnvironmentRepository  : Adding property source: Config resource 'file [/var/folders/y4/59db_d3j6c90d9kmrbccf3040000gn/T/config-repo-13199186765214931613/catalog-service/application-prod.yml]' via location 'file:/var/folders/y4/59db_d3j6c90d9kmrbccf3040000gn/T/config-repo-13199186765214931613/catalog-service/'
+```
