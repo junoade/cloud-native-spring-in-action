@@ -17,3 +17,11 @@ spring:
   cloud:
     config:
       uri: http://localhost:8888
+      request-connect-timeout: 5000 #ms
+      request-read-timeout: 5000 #ms
+      fail-fast: true
+      retry:
+        max-attempts: 6
+        initial-interval: 1000 #ms
+        max-interval: 2000 #ms
+        multiplier: 1.1

@@ -196,3 +196,54 @@ java -jar build/libs/catalog-service-0.0.1-SNAPSHOT.jar --spring.profiles.active
 ```
 2025-07-19T20:58:11.729+09:00  INFO 40651 --- [config-service] [nio-8888-exec-2] o.s.c.c.s.e.NativeEnvironmentRepository  : Adding property source: Config resource 'file [/var/folders/y4/59db_d3j6c90d9kmrbccf3040000gn/T/config-repo-13199186765214931613/catalog-service/application-prod.yml]' via location 'file:/var/folders/y4/59db_d3j6c90d9kmrbccf3040000gn/T/config-repo-13199186765214931613/catalog-service/'
 ```
+
+### 실습) 컨피그 서버 다운시 
+- fail-fast : true 로 해놨고, retry 패턴 적용한 것 확인
+- 로컬 환경이라면 fail-fast : false 지정하자
+```
+ ✘ junhochoi@Junhoui-MacBookPro  ~/Desktop/Studying Programing/Spring/2024_cloudNativeSpring/cloud-native-spring-in-action/Chapter04/04-begin/catalog-service  ↱ ch4-study ±  java -jar build/libs/catalog-service-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.3)
+
+2025-07-19T21:07:28.274+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2025-07-19T21:07:28.275+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Exception on Url - http://localhost:8888:org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://localhost:8888/catalog-service/default": Connection refused. Will be trying the next url if available
+2025-07-19T21:07:28.275+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2025-07-19T21:07:28.275+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Exception on Url - http://localhost:8888:org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://localhost:8888/catalog-service/default": Connection refused. Will be trying the next url if available
+2025-07-19T21:07:28.276+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2025-07-19T21:07:28.276+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Exception on Url - http://localhost:8888:org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://localhost:8888/catalog-service/default": Connection refused. Will be trying the next url if available
+2025-07-19T21:07:28.276+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2025-07-19T21:07:28.276+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Exception on Url - http://localhost:8888:org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://localhost:8888/catalog-service/default": Connection refused. Will be trying the next url if available
+2025-07-19T21:07:28.277+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2025-07-19T21:07:28.277+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Exception on Url - http://localhost:8888:org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://localhost:8888/catalog-service/default": Connection refused. Will be trying the next url if available
+2025-07-19T21:07:28.278+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2025-07-19T21:07:28.278+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Exception on Url - http://localhost:8888:org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://localhost:8888/catalog-service/default": Connection refused. Will be trying the next url if available
+2025-07-19T21:07:28.278+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2025-07-19T21:07:28.278+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Exception on Url - http://localhost:8888:org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://localhost:8888/catalog-service/prod": Connection refused. Will be trying the next url if available
+2025-07-19T21:07:28.279+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2025-07-19T21:07:28.279+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Exception on Url - http://localhost:8888:org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://localhost:8888/catalog-service/prod": Connection refused. Will be trying the next url if available
+2025-07-19T21:07:28.280+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2025-07-19T21:07:28.280+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Exception on Url - http://localhost:8888:org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://localhost:8888/catalog-service/prod": Connection refused. Will be trying the next url if available
+2025-07-19T21:07:28.280+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2025-07-19T21:07:28.280+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Exception on Url - http://localhost:8888:org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://localhost:8888/catalog-service/prod": Connection refused. Will be trying the next url if available
+2025-07-19T21:07:28.281+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2025-07-19T21:07:28.281+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Exception on Url - http://localhost:8888:org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://localhost:8888/catalog-service/prod": Connection refused. Will be trying the next url if available
+2025-07-19T21:07:28.282+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2025-07-19T21:07:28.282+09:00  INFO 41917 --- [catalog-service] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Exception on Url - http://localhost:8888:org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://localhost:8888/catalog-service/prod": Connection refused. Will be trying the next url if available
+2025-07-19T21:07:28.340+09:00 ERROR 41917 --- [catalog-service] [           main] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.cloud.config.client.ConfigClientFailFastException: Could not locate PropertySource and the fail fast property is set, failing
+```
+
+### 실습) 런타임시 새로운 설정 데이터 적용 과정
+1) 새로운 설정 데이터를 원격 깃 저장소로 푸시
+2) 해당 이벤트 후 스프링부트 애플리케이션에 HTTP POST /actuator/refresh 요청 전송
+3) config server로 새로운 설정 데이터 요청
+4) config server는 설정 저장소에서 pull 받아와서 최신 변경 설정 데이터 반환
+5) 스프링부트 애플리케이션은 새 설정 데이터로 빈을 재로드
