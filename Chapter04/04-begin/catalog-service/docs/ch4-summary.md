@@ -243,7 +243,27 @@ org.springframework.cloud.config.client.ConfigClientFailFastException: Could not
 
 ### 실습) 런타임시 새로운 설정 데이터 적용 과정
 1) 새로운 설정 데이터를 원격 깃 저장소로 푸시
+```
+Welcome to the refresh production catalog from the config server
+```
 2) 해당 이벤트 후 스프링부트 애플리케이션에 HTTP POST /actuator/refresh 요청 전송
+```bash
+curl -X POST http://localhost:9001/actuator/refresh
+```
 3) config server로 새로운 설정 데이터 요청
-4) config server는 설정 저장소에서 pull 받아와서 최신 변경 설정 데이터 반환
+4) config server는 설정 저장소에서 pull 받아와서 최신 변경 설정 데이터 반환 `Refreshed keys` 확인
 5) 스프링부트 애플리케이션은 새 설정 데이터로 빈을 재로드
+```
+
+2025-07-19T21:35:40.979+09:00  INFO 42894 --- [catalog-service] [nio-9001-exec-4] c.c.c.ConfigServicePropertySourceLocator : Fetching config from server at : http://localhost:8888
+2025-07-19T21:35:41.807+09:00  INFO 42894 --- [catalog-service] [nio-9001-exec-4] c.c.c.ConfigServicePropertySourceLocator : Located environment: name=application, profiles=[default], label=null, version=b4095fcdbdf490f7bc6b48010a3332eb67a6dbfa, state=
+2025-07-19T21:35:41.807+09:00  INFO 42894 --- [catalog-service] [nio-9001-exec-4] b.c.PropertySourceBootstrapConfiguration : Located property source: [BootstrapPropertySource {name='bootstrapProperties-configClient'}, BootstrapPropertySource {name='bootstrapProperties-https://github.com/junoade/config-repo-example/catalog-service/application.yml'}]
+2025-07-19T21:35:41.809+09:00  INFO 42894 --- [catalog-service] [nio-9001-exec-4] o.s.boot.SpringApplication               : No active profile set, falling back to 1 default profile: "default"
+2025-07-19T21:35:41.811+09:00  INFO 42894 --- [catalog-service] [nio-9001-exec-4] o.s.boot.SpringApplication               : Started application in 0.861 seconds (process running for 58.75)
+2025-07-19T21:35:41.820+09:00  INFO 42894 --- [catalog-service] [nio-9001-exec-4] o.s.cloud.endpoint.RefreshEndpoint       : Refreshed keys : [config.client.version, polar.greeting]
+```
+
+6) 메시지 확인
+```
+Welcome to the refresh default config book catalog!
+```

@@ -25,3 +25,9 @@ spring:
         initial-interval: 1000 #ms
         max-interval: 2000 #ms
         multiplier: 1.1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh
