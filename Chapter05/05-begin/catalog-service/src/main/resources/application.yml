@@ -12,7 +12,7 @@ spring:
     name: catalog-service
   datasource:
     username: user
-    password:
+    password: ${DB_PASSWORD}
     url: jdbc:postgresql://localhost:5432/polardb_catalog
     hikari:
       connection-timeout: 2000 #ms
