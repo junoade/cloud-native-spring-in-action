@@ -19,7 +19,7 @@ spring:
       maximum-pool-size: 5
   sql:
     init:
-      mode: always
+      mode: never # flyway 사용에 따른 never 변경
 
   config:
     import: "optional:configserver:"
