@@ -34,7 +34,7 @@ class BookRepositoryJdbcTest {
     @DisplayName("이미 등록된 ISBN 도서 조회")
     void findBookByIsbnWhenExisting() {
         var bookIsbn = "1234561237";
-        var book = Book.of(bookIsbn, "Title", "Author", 12.90);
+        var book = Book.of(bookIsbn, "Title", "Author", 12.90, "Publisher");
 
         jdbcAggregateTemplate.insert(book);
         Optional<Book> actualBook = bookRepository.findByIsbn(bookIsbn);
@@ -46,8 +46,8 @@ class BookRepositoryJdbcTest {
     @Test
     @DisplayName("모든 도서 조회")
     void findAllBooks() {
-        var book1 = Book.of("1234561235", "Title", "Author", 12.90);
-        var book2 = Book.of("1234561236", "Another Title", "Author", 12.90);
+        var book1 = Book.of("1234561235", "Title", "Author", 12.90, "Publisher");
+        var book2 = Book.of("1234561236", "Another Title", "Author", 12.90, "Publisher");
         jdbcAggregateTemplate.insert(book1);
         jdbcAggregateTemplate.insert(book2);
 
@@ -63,7 +63,7 @@ class BookRepositoryJdbcTest {
     @DisplayName("도서 존재시 참 반환")
     void existsByIsbnWhenExistingThenTrue() {
         var bookIsbn = "1234561239";
-        var book = Book.of(bookIsbn, "Title", "Author", 12.90);
+        var book = Book.of(bookIsbn, "Title", "Author", 12.90, "Publisher");
 
         jdbcAggregateTemplate.insert(book);
         boolean isExists = bookRepository.existsByIsbn(bookIsbn);
